@@ -89,6 +89,7 @@ export const register: AppThunk = (
             });
 
             localStorage.setItem("userBHsoft", JSON.stringify(data));
+            document.location.href = "/";
         } catch (error: any) {
             dispatch({
                 type: UserActionTypes.REGISTER_FAIL,

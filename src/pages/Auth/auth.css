@@ -48,18 +48,6 @@
     min-height: 450px;
 }
 
-.loginInput {
-    height: 50px;
-    border-radius: 10px;
-    border: 1px solid gray;
-    font-size: 18px;
-    padding-left: 20px;
-}
-
-.loginInput:focus {
-    outline: none;
-}
-
 .loginButton {
     height: 50px;
     border-radius: 10px;

@@ -1,17 +1,69 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Toast } from "react-bootstrap";
+import { Toast } from "react-bootstrap";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import InputForm from "../../components/InputForm/InputForm";
 import { register } from "../../redux/user/actions";
 import "./auth.css";
 
 const Register = () => {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [message, setMessage] = useState("");
+    const [values, setValues] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    interface valuesInput {
+        id: number;
+        name: string;
+        type: string;
+        placeholder: string;
+        errorMessage: string;
+        pattern?: string;
+        required: boolean;
+    }
+
+    const inputs: Array<valuesInput> = [
+        {
+            id: 1,
+            name: "username",
+            type: "text",
+            placeholder: "Username",
+            errorMessage:
+                "Username should be 3-16 characters and shouldn't include any special character!",
+            pattern: "^[A-Za-z0-9]{3,16}$",
+            required: true,
+        },
+        {
+            id: 2,
+            name: "email",
+            type: "email",
+            placeholder: "Email",
+            errorMessage: "It should be a valid email address!",
+            required: true,
+        },
+        {
+            id: 3,
+            name: "password",
+            type: "password",
+            placeholder: "Password",
+            errorMessage:
+                "Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
+            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$`,
+            required: true,
+        },
+        {
+            id: 4,
+            name: "confirmPassword",
+            type: "password",
+            placeholder: "Confirm Password",
+            errorMessage: "Passwords don't match!",
+            pattern: values.password,
+            required: true,
+        },
+    ];
 
     const [showToast, setShowToast] = useState(false);
     const toggleShowToast = () => setShowToast(!showToast);
@@ -29,13 +81,13 @@ const Register = () => {
         }
     }, [history, user]);
 
+    const onChange = (e: any) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+    };
+
     const submitHandler = (e: any) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            setMessage("Password don't match");
-        } else {
-            dispatch(register(username, email, password));
-        }
+        dispatch(register(values.username, values.email, values.password));
     };
 
     return (
@@ -63,44 +115,14 @@ const Register = () => {
                             className="loginBox register"
                             onSubmit={submitHandler}
                         >
-                            <input
-                                placeholder="Username"
-                                className="loginInput"
-                                type="text"
-                                required
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <input
-                                placeholder="Email"
-                                className="loginInput"
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <input
-                                placeholder="Password"
-                                className="loginInput"
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <input
-                                placeholder="Password Again"
-                                className="loginInput"
-                                type="password"
-                                required
-                                value={confirmPassword}
-                                onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
-                                }
-                            />
-                            {message !== "" && (
-                                <Alert variant="danger">{message}</Alert>
-                            )}
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {inputs.map((input) => (
+                                <InputForm
+                                    key={input.id}
+                                    {...input}
+                                    value={(values as any)[input.name]}
+                                    onChange={onChange}
+                                />
+                            ))}
                             <button className="loginButton" type="submit">
                                 {loading ? (
                                     <i className="fa fa-spinner fa-spin" />
