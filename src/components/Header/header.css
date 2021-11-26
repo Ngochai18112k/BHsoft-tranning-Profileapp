@@ -1,0 +1,30 @@
+.header {
+    background-color: #1775ee;
+    color: white;
+    height: 60px;
+}
+
+.headerWrapper {
+    height: 100%;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerLogo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.headerRightActionLink {
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+.headerRightActionLink:hover {
+    color: rgb(206, 204, 204);
+}
